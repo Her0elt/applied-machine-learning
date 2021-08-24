@@ -2,9 +2,7 @@ import torch
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-
-train = pd.read_csv('data/length_weight.csv')
+train = pd.read_csv('../data/length_weight.csv')
 train_y = train.pop('weight')
 train_x = torch.tensor(train.to_numpy(), dtype=torch.double).reshape(-1, 1)
 train_y = torch.tensor(train_y.to_numpy(), dtype=torch.double).reshape(-1, 1)
@@ -26,24 +24,19 @@ class LinearRegressionModel:
 
 model = LinearRegressionModel()
 
-# Optimize: adjust W and b to minimize loss using stochastic gradient descent
 optimizer = torch.optim.SGD([model.W, model.b], 0.0001)
-for epoch in range(1000000):
-    model.loss(train_x, train_y).backward()  # Compute loss gradients
-    optimizer.step()  # Perform optimization by adjusting W and b,
-    # similar to:
-    # model.W -= model.W.grad * 0.01
-    # model.b -= model.b.grad * 0.01
+for epoch in range(500000):
+    model.loss(train_x, train_y).backward()
+    optimizer.step() 
 
-    optimizer.zero_grad()  # Clear gradients for next step
+    optimizer.zero_grad() 
 
-# Print model variables and loss
 print("W = %s, b = %s, loss = %s" % (model.W, model.b, model.loss(train_x, train_y)))
 
 plt.plot(train_x, train_y, 'o', label='$(x^{(i)},y^{(i)})$')
 plt.xlabel('x')
 plt.ylabel('y')
-x = torch.tensor([[torch.min(train_x)], [torch.max(train_x)]])  # x = [[1], [6]]]
+x = torch.tensor([[torch.min(train_x)], [torch.max(train_x)]])
 plt.plot(x, model.f(x).detach(), label='$\\hat y = f(x) = xW+b$')
 plt.legend()
 plt.show()
