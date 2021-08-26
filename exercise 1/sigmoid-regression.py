@@ -4,22 +4,25 @@ import matplotlib.pyplot as plt
 
 train = pd.read_csv('data/day_head_circumference.csv', dtype='float')
 train_y = train.pop('head circumference')
+
 train_x = torch.tensor(train.to_numpy(), dtype=torch.float)
 train_y = torch.tensor(train_y.to_numpy(), dtype=torch.float).reshape(-1,1)
 
+
 class NonLinearRegressionModel:
-    def __init__(self):
+    def __init__(self, max):
+        self.max = max
         self.W = torch.tensor([[0.0]], requires_grad=True)
         self.b = torch.tensor([[0.0]], requires_grad=True)
 
     def f(self, x):
-        return 20 * 1 / (1 + torch.exp(-(x @ self.W + self.b))) + 31
+        return 20 * torch.sigmoid((x @ self.W + self.b)) + 31
 
     def loss(self, x, y):
         return torch.nn.functional.mse_loss(self.f(x), y)
 
 
-model = NonLinearRegressionModel()
+model = NonLinearRegressionModel(train.shape[0])
 
 optimizer = torch.optim.SGD([model.b, model.W], 0.000001)
 for epoch in range(100000):
