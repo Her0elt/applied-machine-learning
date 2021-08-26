@@ -2,18 +2,12 @@
 import torch
 import pandas as pd
 import matplotlib.pyplot as plt
-import torch.nn.functional as F
-import torch.nn as nn
 
-
-
-
-train = pd.read_csv('data/day_length_weight.csv', dtype='float')
+train = pd.read_csv('../data/day_length_weight.csv', dtype='float')
 train_y = train.pop('day')
 train_x = torch.tensor(train.to_numpy(), dtype=torch.float).reshape(-1,2)
 train_y = torch.tensor(train_y.to_numpy(), dtype=torch.float).reshape(-1,1)
 
-print(train_x[1:5])
 
 class NonLinearRegressionModel:
     def __init__(self):

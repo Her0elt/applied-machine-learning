@@ -2,12 +2,11 @@ import torch
 import pandas as pd
 import matplotlib.pyplot as plt
 
-train = pd.read_csv('data/day_head_circumference.csv', dtype='float')
+train = pd.read_csv('../data/day_head_circumference.csv', dtype='float')
 train_y = train.pop('head circumference')
 
 train_x = torch.tensor(train.to_numpy(), dtype=torch.float)
 train_y = torch.tensor(train_y.to_numpy(), dtype=torch.float).reshape(-1,1)
-
 
 class NonLinearRegressionModel:
     def __init__(self, max):
